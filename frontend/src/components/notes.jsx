@@ -47,48 +47,49 @@ function Notes() {
   if (createNote) {
     return (
       <div
-        className={`fixed inset-0 flex flex-col justify-center items-center bg-transparent transition-all duration-50 ease-in backdrop-blur-sm border-2 shadow-lg p-6 z-50 ${
+        className={`fixed inset-0 flex flex-col justify-center items-center bg-black/40 transition-all duration-150 ease-in backdrop-blur-md z-50 ${
           createNote ? "opacity-100 scale-100" : "opacity-0 scale-50"
         }`}
       >
-        <div className="absolute top-4 right-4">
+        <div className="bg-gradient-to-br from-blue-100 via-white to-blue-200 rounded-2xl shadow-2xl p-6 w-full max-w-sm relative border-2 border-blue-300">
           <button
             onClick={() => setCreateNote(false)}
-            className="px-3 py-1 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
+            className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-xl font-bold transition"
+            title="Close"
           >
             <MdClose />
           </button>
+          <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center tracking-wide drop-shadow">
+            Create Note
+          </h2>
+          <input
+            placeholder="Enter title"
+            className="border-2 border-blue-300 rounded-lg w-full p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 text-base shadow"
+            value={newPost.title}
+            onChange={(e) =>
+              setNewPost((prevPost) => ({ ...prevPost, title: e.target.value }))
+            }
+          />
+          <textarea
+            placeholder="Enter text"
+            className="border-2 border-blue-300 rounded-lg w-full p-3 h-28 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 text-sm shadow"
+            value={newPost.text}
+            onChange={(e) =>
+              setNewPost((prevPost) => ({ ...prevPost, text: e.target.value }))
+            }
+          />
+          <button
+            className="mt-6 w-full px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 font-semibold text-base transition"
+            onClick={async () => {
+              await postNote(newPost);
+              setNewPost({ title: "", text: "" });
+              setCreateNote(false);
+              setNotes(await getNotes());
+            }}
+          >
+            Add Note
+          </button>
         </div>
-
-        <input
-          placeholder="Enter title"
-          className="border-2 rounded-md w-1/2 p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={newPost.title}
-          onChange={(e) =>
-            setNewPost((prevPost) => ({ ...prevPost, title: e.target.value }))
-          }
-        />
-
-        <textarea
-          placeholder="Enter text"
-          className="border-2 rounded-md w-1/2 p-2 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={newPost.text}
-          onChange={(e) =>
-            setNewPost((prevPost) => ({ ...prevPost, text: e.target.value }))
-          }
-        />
-
-        <button
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600"
-          onClick={async () => {
-            await postNote(newPost);
-            setNewPost({ title: "", text: "" });
-            setCreateNote(false);
-            setNotes(await getNotes());
-          }}
-        >
-          Add Note
-        </button>
       </div>
     );
   }
@@ -96,62 +97,62 @@ function Notes() {
   if (Object.keys(updatingPost).length > 0) {
     return (
       <div
-        className={`fixed inset-0 flex flex-col justify-center items-center bg-transparent transition-all duration-50 ease-in backdrop-blur-sm border-2 shadow-lg p-6 z-50 ${
+        className={`fixed inset-0 flex flex-col justify-center items-center bg-black/40 transition-all duration-150 ease-in backdrop-blur-md z-50 ${
           Object.keys(updatingPost).length > 0
             ? "opacity-100 scale-100"
             : "opacity-0 scale-50"
         }`}
       >
-        <div className="absolute top-4 right-4">
+        <div className="bg-gradient-to-br from-blue-100 via-white to-blue-200 rounded-2xl shadow-2xl p-6 w-full max-w-sm relative border-2 border-blue-300">
           <button
             onClick={() => {
               setUpdatingPost({});
               setDisplayNote({});
             }}
-            className="px-3 py-1 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
+            className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-xl font-bold transition"
+            title="Close"
           >
             <MdClose />
           </button>
+          <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center tracking-wide drop-shadow">
+            Update Note
+          </h2>
+          <input
+            placeholder="Enter title"
+            className="border-2 border-blue-300 rounded-lg w-full p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 text-base shadow"
+            value={updatingPost.title}
+            onChange={(e) =>
+              setUpdatingPost((prevPost) => ({
+                ...prevPost,
+                title: e.target.value,
+              }))
+            }
+          />
+          <textarea
+            placeholder="Enter text"
+            className="border-2 border-blue-300 rounded-lg w-full p-3 h-28 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 text-sm shadow"
+            value={updatingPost.text}
+            onChange={(e) =>
+              setUpdatingPost((prevPost) => ({
+                ...prevPost,
+                text: e.target.value,
+              }))
+            }
+          />
+          <button
+            className="mt-6 w-full px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 font-semibold text-base transition"
+            onClick={async () => {
+              setDisplayNote({});
+              await updateNote(postTitle, updatingPost);
+              setUpdatingPost({});
+              setNotes(await getNotes());
+              setNote(null);
+              alert(`${postTitle} updated successfully`);
+            }}
+          >
+            Update Note
+          </button>
         </div>
-
-        <input
-          placeholder="Enter title"
-          className="border-2 rounded-md w-1/2 p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={updatingPost.title}
-          onChange={(e) =>
-            setUpdatingPost((prevPost) => ({
-              ...prevPost,
-              title: e.target.value,
-            }))
-          }
-        />
-
-        <textarea
-          placeholder="Enter text"
-          className="border-2 rounded-md w-1/2 p-2 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-          value={updatingPost.text}
-          onChange={(e) =>
-            setUpdatingPost((prevPost) => ({
-              ...prevPost,
-              text: e.target.value,
-            }))
-          }
-        />
-
-        <button
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600"
-          onClick={async () => {
-            setDisplayNote({});
-            console.log(postTitle);
-            await updateNote(postTitle, updatingPost);
-            setUpdatingPost({});
-            setNotes(await getNotes());
-            setNote(null);
-            alert("note updated succesfully");
-          }}
-        >
-          Update Note
-        </button>
       </div>
     );
   }
@@ -186,38 +187,42 @@ function Notes() {
   //searching a note
   if (note && searchTitle) {
     return (
-      <div className="p-4 flex flex-col w-full items-center gap-3 ">
+      <div className="p-6 flex justify-center items-center w-full">
         <div
-          className=" border rounded-lg p-3 w-full shadow-sm bg-white  relative hover:shadow-md transition"
+          className="relative bg-gradient-to-br from-blue-200 via-white to-blue-100 border border-blue-200 rounded-xl shadow-lg h-40 w-72 flex flex-col justify-between p-4 hover:scale-105 hover:shadow-xl transition-all cursor-pointer"
           onClick={() => {
             setDisplayNote(note);
           }}
         >
-          <p className="text-lg font-medium mb-1">{note.title}</p>
-          <p className="text-gray-600 text-sm line-clamp-2">{note.text}</p>
-          <div className="absolute right-1 top-1 flex flex-row gap-1">
+          <div>
+            <p className="text-lg font-semibold text-blue-700 mb-2 truncate">
+              {note.title}
+            </p>
+            <p className="text-gray-600 text-sm line-clamp-2">{note.text}</p>
+          </div>
+          <div className="absolute right-2 bottom-2 flex flex-row gap-2">
             <button
-              className="px-3 py-1 bg-blue-400 font-semibold text-gray-100 text-center text-xs rounded-sm shadow-md hover:bg-green-600 hover:shadow-lg transition"
+              className="px-2 py-1 bg-blue-400 font-semibold text-white text-xs rounded shadow hover:bg-green-600 transition"
               onClick={(e) => {
                 e.stopPropagation();
                 setUpdatingPost({ title: note.title, text: note.text });
                 setPostTitle(note.title);
               }}
             >
-              update
+              Update
             </button>
             <button
-              className="px-3 py-1  bg-blue-400 font-semibold text-gray-100 text-center text-xs rounded-sm shadow-md hover:bg-green-600 hover:shadow-lg transition"
+              className="px-2 py-1 bg-red-400 font-semibold text-white text-xs rounded shadow hover:bg-red-600 transition"
               onClick={async (e) => {
                 e.stopPropagation();
                 await deleteNote(searchTitle);
-                alert(`${searchTitle} deleted succesfully`);
+                alert(`${searchTitle} deleted successfully`);
                 setDisplayNote({});
                 setNotes(await getNotes());
                 setNote(null);
               }}
             >
-              delete
+              Delete
             </button>
           </div>
         </div>
@@ -236,22 +241,25 @@ function Notes() {
   return (
     <>
       {notes.length > 0 && !loading ? (
-        <div className="p-4 flex flex-col w-full items-center gap-3">
-          {notes.map((note, id) => {
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+          {(note && searchTitle ? [note] : notes).map((note, id) => {
             return (
               <div
                 key={id}
-                className="relative border rounded-lg p-3 w-full shadow-sm bg-white hover:shadow-md transition"
+                className="relative bg-gradient-to-br from-blue-200 via-white to-blue-100 border border-blue-200 rounded-xl shadow-lg h-40 flex flex-col justify-between p-4 hover:scale-105 hover:shadow-xl transition-all cursor-pointer"
                 onClick={() => setDisplayNote(note)}
               >
-                <p className="text-lg font-medium mb-1">{note.title}</p>
-                <p className="text-gray-600 text-sm line-clamp-1">
-                  {note.text}
-                </p>
-
-                <div className="absolute right-1 top-1 flex flex-row gap-1">
+                <div>
+                  <p className="text-lg font-semibold text-blue-700 mb-2 truncate">
+                    {note.title}
+                  </p>
+                  <p className="text-gray-600 text-sm line-clamp-2">
+                    {note.text}
+                  </p>
+                </div>
+                <div className="absolute right-2 bottom-2 flex flex-row gap-2">
                   <button
-                    className="px-3 py-1 bg-blue-400 font-semibold text-gray-100 text-center text-xs rounded-md shadow-md hover:bg-green-600 hover:shadow-lg transition"
+                    className="px-2 py-1 bg-blue-400 font-semibold text-white text-xs rounded shadow hover:bg-green-600 transition"
                     onClick={(e) => {
                       e.stopPropagation();
                       setUpdatingPost({ title: note.title, text: note.text });
@@ -259,19 +267,19 @@ function Notes() {
                       setDisplayNote({});
                     }}
                   >
-                    update
+                    Update
                   </button>
                   <button
-                    className="px-3 py-1  bg-blue-400 font-semibold text-gray-100 text-center text-xs rounded-md shadow-md hover:bg-green-600 hover:shadow-lg transition"
+                    className="px-2 py-1 bg-red-400 font-semibold text-white text-xs rounded shadow hover:bg-red-600 transition"
                     onClick={async (e) => {
                       e.stopPropagation();
                       setDisplayNote({});
-                      alert(`${note.title} deleted succesfully`);
+                      alert(`${note.title} deleted successfully`);
                       await deleteNote(note.title);
                       setNotes(await getNotes());
                     }}
                   >
-                    delete
+                    Delete
                   </button>
                 </div>
               </div>
@@ -279,7 +287,7 @@ function Notes() {
           })}
         </div>
       ) : (
-        <div className="flex w-full  flex-row justify-center items-center ">
+        <div className="flex w-full flex-row justify-center items-center ">
           <p className="text-center">No notes available</p>
         </div>
       )}
