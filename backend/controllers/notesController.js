@@ -1,18 +1,19 @@
 import Notes from "../models/model.notes.js";
 
 //get all posts
-const getNotes = async (req, res) => {
+const getNotes = async (req, res, next) => {
   try {
     const notes = await Notes.find({});
+    console.log(notes);
     res.status(200).json(notes);
   } catch (e) {
-    res.status(500).json({ msg: e.message });
+    next(e);
   }
 };
 
 //get notes by title
 
-const getNoteByTitle = async (req, res) => {
+const getNoteByTitle = async (req, res, next) => {
   try {
     const title = req.params.title;
     console.log(title);
@@ -23,24 +24,24 @@ const getNoteByTitle = async (req, res) => {
     }
     res.status(200).json(note);
   } catch (e) {
-    res.status(404).json({ msg: e.message });
+    next(e);
   }
 };
 
 //post a note
-const postNote = async (req, res) => {
+const postNote = async (req, res, next) => {
   try {
     const note = await Notes.create(req.body);
     console.log(note);
     res.status(201).json(note);
   } catch (e) {
     console.log(e.message);
-    res.status(500).json({ msg: "error occured" });
+    next(e);
   }
 };
 
 //update a note
-const updateNote = async (req, res) => {
+const updateNote = async (req, res, next) => {
   try {
     const title = req.params.title;
     let note = await Notes.findOneAndUpdate({ title }, req.body, { new: true });
@@ -50,13 +51,13 @@ const updateNote = async (req, res) => {
     console.log(note);
     res.status(200).json(note);
   } catch (e) {
-    res.status(500).json({ msg: e.message });
+    next(e);
   }
 };
 
 //delete a note
 
-const deleteNote = async (req, res) => {
+const deleteNote = async (req, res, next) => {
   try {
     const title = req.params.title;
     const note = await Notes.findOneAndDelete({ title }, req.body);
@@ -65,7 +66,7 @@ const deleteNote = async (req, res) => {
     }
     res.status(200).json({ msg: "deleted succesfully!" });
   } catch (e) {
-    res.status(500).json({ msg: e.message });
+    next(e);
   }
 };
 

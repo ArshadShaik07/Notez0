@@ -54,11 +54,12 @@ function Notes() {
         <div className="bg-gradient-to-br from-blue-100 via-white to-blue-200 rounded-2xl shadow-2xl p-6 w-full max-w-sm relative border-2 border-blue-300">
           <button
             onClick={() => setCreateNote(false)}
-            className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-xl font-bold transition"
+            className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-xl font-bold transition scale-125 cursor-pointer p-1"
             title="Close"
           >
-            <MdClose />
+            ✕
           </button>
+
           <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center tracking-wide drop-shadow">
             Create Note
           </h2>
@@ -112,7 +113,7 @@ function Notes() {
             className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-xl font-bold transition"
             title="Close"
           >
-            <MdClose />
+            ✕
           </button>
           <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center tracking-wide drop-shadow">
             Update Note
